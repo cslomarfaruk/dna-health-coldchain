@@ -18,43 +18,83 @@ export const DispensaryHeader: React.FC<DispensaryHeaderProps> = ({
   pharmacistName,
   backendError,
   onClearBackendError,
+  onSelectScenario,
 }) => {
+  const isHl7Rejection =
+    backendError?.includes('HL7_MESSAGE_TYPE_REJECTED') ||
+    backendError?.includes('HL7 Message Rejected');
+
   return (
     <>
-      {/* Backend Error / Notice */}
+      {/* Backend Error / Safety Gate Notice */}
       {backendError && (
         <div
           style={{
-            backgroundColor: '#fef2f2',
-            border: '1px solid #fca5a5',
+            backgroundColor: isHl7Rejection ? '#fff7ed' : '#fef2f2',
+            border: `1px solid ${isHl7Rejection ? '#fed7aa' : '#fca5a5'}`,
             borderRadius: '6px',
             padding: '0.65rem 0.95rem',
             fontSize: '0.78rem',
-            color: '#991b1b',
+            color: isHl7Rejection ? '#9a3412' : '#991b1b',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '0.5rem',
+            gap: '0.75rem',
+            flexWrap: 'wrap',
           }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-            <AlertTriangle size={15} style={{ color: '#dc2626', flexShrink: 0 }} />
-            <span style={{ fontWeight: 600 }}>{backendError}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flex: 1, minWidth: '240px' }}>
+            <AlertTriangle
+              size={15}
+              style={{ color: isHl7Rejection ? '#ea580c' : '#dc2626', flexShrink: 0 }}
+            />
+            <span>
+              <strong>
+                {isHl7Rejection ? 'Clinical Protocol Gate Active: ' : 'Workflow Warning: '}
+              </strong>
+              {backendError}
+            </span>
           </div>
-          <button
-            type="button"
-            onClick={onClearBackendError}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#991b1b',
-              cursor: 'pointer',
-              fontSize: '0.85rem',
-              fontWeight: 700,
-            }}
-          >
-            <X size={14} />
-          </button>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            {isHl7Rejection && onSelectScenario && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSelectScenario('SCENARIO-INSULIN');
+                  onClearBackendError();
+                }}
+                className="btn btn-secondary"
+                style={{
+                  fontSize: '0.72rem',
+                  padding: '0.25rem 0.6rem',
+                  backgroundColor: '#ffffff',
+                  borderColor: '#fed7aa',
+                  color: '#9a3412',
+                }}
+              >
+                Reset to Standard Order (Insulin)
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onClearBackendError}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: isHl7Rejection ? '#9a3412' : '#991b1b',
+                cursor: 'pointer',
+                fontSize: '0.85rem',
+                fontWeight: 700,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+              title="Dismiss notice"
+            >
+              <X size={14} />
+            </button>
+          </div>
         </div>
       )}
 

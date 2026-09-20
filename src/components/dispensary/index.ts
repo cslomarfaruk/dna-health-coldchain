@@ -10,3 +10,4 @@ export * from './steps/Step2ValidateDrug';
 export * from './steps/Step3ProcessDelivery';
 export * from './steps/Step4ApproveDispatch';
 export * from './steps/Step5HipaaCompliance';
+export * from './Hl7RejectionTestCard';

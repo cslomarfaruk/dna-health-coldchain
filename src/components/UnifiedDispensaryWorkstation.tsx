@@ -23,6 +23,7 @@ import {
   Step3ProcessDelivery,
   Step4ApproveDispatch,
   Step5HipaaCompliance,
+  Hl7RejectionTestCard,
   DispensaryStepItem,
 } from './dispensary';
 
@@ -282,6 +283,7 @@ export const UnifiedDispensaryWorkstation: React.FC<UnifiedDispensaryWorkstation
         pharmacistName={pharmacistName}
         backendError={backendError || null}
         onClearBackendError={onClearBackendError || (() => {})}
+        onSelectScenario={onSelectScenario}
       />
 
       {/* 2. PROGRESS PIPELINE OR DISPATCHED DOSSIER BANNER (Only when a patient request is active) */}
@@ -334,7 +336,13 @@ export const UnifiedDispensaryWorkstation: React.FC<UnifiedDispensaryWorkstation
 
         {/* RIGHT COLUMN: EMPTY STATE OR STEP VERIFICATION */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 0 }}>
-          {!activeIndent ? (
+          {selectedScenarioId === 'SCENARIO-INVALID-HL7' ? (
+            /* Dedicated Protocol Test View: Explains the MSH-9 message type rejection clearly */
+            <Hl7RejectionTestCard
+              backendError={backendError}
+              onResetScenario={onSelectScenario}
+            />
+          ) : !activeIndent ? (
             /* Requirement: When no patient is selected, do NOT show steps. Show clean clinical guidance. */
             <DispensaryEmptyState
               availableIndents={availableIndents}

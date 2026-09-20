@@ -89,6 +89,7 @@ export interface DispensaryHeaderProps {
   pharmacistName: string;
   backendError: string | null;
   onClearBackendError: () => void;
+  onSelectScenario?: (id: string) => void;
 }
 
 export interface DispatchedDossierBannerProps {
