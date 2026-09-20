@@ -2,8 +2,18 @@
 
 **Candidate Submission**: Case 1 — Pharmacy Cold Chain to Inpatient Floor  
 **Applicant Position**: Vibe Coder @ DNA Health  
-**Evaluator**: Nasif Ibne Mohiuddin (<nasif.mohiuddin@dnahealth.co>)  
-**Date**: September 16, 2026 (Deadline: September 22, 2026)  
+**Candidate**: Omar Faruk  
+**Date**: September 20, 2026 (Deadline: September 22, 2026)  
+**Public Repository**: [https://github.com/cslomarfaruk/dna-health-coldchain](https://github.com/cslomarfaruk/dna-health-coldchain)  
+**Live Demo Preview**: [https://medical.devcsl.tech](https://medical.devcsl.tech)  
+
+### Demo Accounts for Evaluator Review
+| Role | Username | Password | Default Workstation |
+|---|---|---|---|
+| **Ward Nurse** | `nurse_elizabeth` | `NursePass123!` | `/indents` (Bedside Requisitions) |
+| **Dispensary Pharmacist** | `pharm_vance` | `PharmPass123!` | `/dispensary` (Central Dispensary) |
+| **Hospital Administrator** | `admin_sys` | `AdminPass123!` | `/dispensary` (Ward Oversight) |
+| **Clinical Auditor** | `auditor_chen` | `AuditPass123!` | `/audit` (HIPAA Audit Vault) |
 
 ---
 
