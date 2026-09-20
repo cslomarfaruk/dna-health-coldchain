@@ -61,7 +61,7 @@ const distPath = path.resolve(__dirname, '../dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));
   app.use((req, res, next) => {
-    if (req.method === 'GET' && !req.path.startsWith('/api') && !req.path.startsWith('/oauth') && !req.path.startsWith('/.well-known')) {
+    if ((req.method === 'GET' || req.method === 'HEAD') && !req.path.startsWith('/api') && !req.path.startsWith('/oauth') && !req.path.startsWith('/.well-known')) {
       return res.sendFile(path.join(distPath, 'index.html'));
     }
     next();
