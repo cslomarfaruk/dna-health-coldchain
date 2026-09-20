@@ -231,3 +231,23 @@ npm run server
 # 5. Start Vite frontend (port 5173) in a separate terminal
 npm run dev
 ```
+
+---
+
+## 8. Clinical & Technical Assumptions Made
+
+1. **Reconciliation Authority**: Assumed that the EHR FHIR `MedicationRequest` authored by the attending physician represents the ultimate clinical source of truth. Any discrepancy with the nurse indent (e.g. bedside typographical dose error) or HL7 feed triggers a hard clinical hold that requires prescriber/pharmacist reconciliation before dispensing.
+2. **Cold-Chain Transport Telemetry**: In the absence of physical Bluetooth Low Energy (BLE) temperature loggers on the test bench, sensor telemetry is modeled as a calibrated real-time data feed (reading 3.8°C within the strict 2°C–8°C refrigerated biologicals envelope) with automated violation guards.
+3. **HIPAA Floor Notifications**: Assumed floor nurses receive lockbox transit alerts on mobile/ward display devices in shared or high-traffic corridors. Under HIPAA Safe Harbor (45 CFR § 164.514(b)(2)), all direct identifiers (patient name, full MRN, and exact drug name) are suppressed on the notification payload, replaced with an opaque dispatch reference and designated physical drop station.
+4. **HL7 v2 Transport**: While production hospital integration engines typically communicate via raw TCP MLLP sockets, for this assessment's web service architecture, the HL7 v2.5 `OMP^O09` feed is ingested via an authenticated HTTPS REST endpoint with full ER7 pipe-and-hat validation and `MSH-10` message deduplication.
+
+---
+
+## 9. What I'd Improve With More Time
+
+1. **Persistent WebSocket / Server-Sent Events (SSE) Floor Telemetry**: Replace poll-based synchronization with an SSE streaming channel to provide floor nurses with sub-second courier map tracking and live cooler temperature drift alerts.
+2. **Offline-Capable PWA with IndexedDB Outbox**: Implement a Progressive Web App (PWA) service worker on the nurse workstation allowing offline indent creation during hospital Wi-Fi dropouts, queuing requests in an encrypted IndexedDB outbox.
+3. **Smart on FHIR EHR Launch Integration**: Package the workstation as an embeddable SMART on FHIR app launchable directly inside Epic Hyperspace or Cerner Millennium patient chart frames.
+4. **Hardware BLE Beacon Integration**: Integrate Web Bluetooth API or a native edge daemon to pair with real physical TempTale / Elitech cold-chain data loggers during cooler packing.
+5. **Multi-Tenancy & Ward Hierarchy**: Add granular hospital facility hierarchy (Campus -> Tower -> Floor -> Unit -> Bed) with automated ward-specific pharmacy routing.
+
