@@ -1,0 +1,180 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String             @id @default(uuid())
+  username       String             @unique
+  passwordHash   String
+  fullName       String
+  role           String             // NURSE, PHARMACIST, AUDITOR, ADMIN
+  practitionerId String?
+  email          String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  indents        MedicationIndent[]
+  dispenses      DispenseWorkflow[]
+}
+
+model MedicationIndent {
+  id                    String                 @id @default(uuid())
+  indentNumber          String                 @unique
+  patientMrn            String
+  patientName           String
+  requestedDrugName     String
+  requestedDose         String
+  requestedUnits        String
+  formulation           String?
+  route                 String?
+  priority              String                 @default("ROUTINE") // ROUTINE, URGENT, STAT
+  coldChainRequired     Boolean                @default(true)
+  ward                  String
+  bed                   String?
+  status                String                 @default("PENDING") // PENDING, RECONCILED, REJECTED, FULFILLED
+  nurseId               String?
+  nurse                 User?                  @relation(fields: [nurseId], references: [id])
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  workflows             DispenseWorkflow[]
+  reconciliationResults ReconciliationResult[]
+}
+
+model HL7Message {
+  id                    String                 @id @default(uuid())
+  messageControlId      String                 @unique // MSH-10 Message Control ID
+  messageType           String                 // MSH-9 (OMP^O09)
+  sendingApp            String
+  sendingFacility       String?
+  patientMrn            String                 // PID-3
+  patientName           String                 // PID-5
+  placerOrderNumber     String                 // ORC-2
+  drugCode              String                 // RXO-1
+  drugName              String
+  giveAmount            String                 // RXO-2
+  giveUnits             String                 // RXO-3
+  routeCode             String?                // RXR-1
+  routeName             String?
+  assignedLocation      String?                // PV1-3
+  notes                 String?                // NTE-3
+  rawMessage            String
+  isValid               Boolean                @default(true)
+  validationError       String?
+  createdAt             DateTime               @default(now())
+  reconciliationResults ReconciliationResult[]
+}
+
+model MedicationValidation {
+  id                     String   @id @default(uuid())
+  queryDrugName          String
+  queryDose              String?
+  rxcui                  String
+  officialName           String
+  termType               String
+  formulationMatchStatus String   // EXACT_MATCH, ACCEPTABLE_EQUIVALENT, STRENGTH_MISMATCH, UNREGISTERED_FORMULATION, NOT_FOUND, RXNORM_UNAVAILABLE
+  isColdChain            Boolean  @default(false)
+  tempMinCelsius         Float?
+  tempMaxCelsius         Float?
+  clinicalSafetyNotes    String
+  validatedAt            DateTime @default(now())
+}
+
+model ReconciliationResult {
+  id                      String             @id @default(uuid())
+  indentId                String
+  indent                  MedicationIndent   @relation(fields: [indentId], references: [id])
+  fhirMedicationRequestId String
+  hl7MessageId            String
+  hl7Message              HL7Message         @relation(fields: [hl7MessageId], references: [id])
+  overallStatus           String             // PASSED, FAILED, INCOMPLETE
+  patientMatch            Boolean
+  medicationMatch         Boolean
+  formulationMatch        Boolean
+  strengthMatch           Boolean
+  doseMatch               Boolean
+  routeMatch              Boolean
+  discrepancies           String             // JSON string array of discrepancy explanations
+  reconciledAt            DateTime           @default(now())
+  workflows               DispenseWorkflow[]
+}
+
+model DispenseWorkflow {
+  id                      String                @id @default(uuid())
+  workflowNumber          String                @unique
+  status                  String                @default("PENDING") // PENDING, VALIDATING, VALIDATED, RECONCILIATION_FAILED, READY_FOR_DISPATCH, DISPATCHED, DELIVERED, DISPENSE_FAILED
+  indentId                String?
+  indent                  MedicationIndent?     @relation(fields: [indentId], references: [id])
+  fhirMedicationRequestId String?
+  hl7MessageControlId     String?
+  reconciliationId        String?
+  reconciliation          ReconciliationResult? @relation(fields: [reconciliationId], references: [id])
+  coolerBoxId             String?
+  currentTempCelsius      Float?
+  courierId               String?
+  courierName             String?
+  estimatedArrivalMinutes Int?
+  fhirMedicationDispenseId String?
+  authorizedById          String?
+  authorizedBy            User?                 @relation(fields: [authorizedById], references: [id])
+  dispatchedAt            DateTime?
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  notifications            Notification[]
+  outbox                   DispenseOutbox?
+}
+
+model DispenseOutbox {
+  id             String           @id @default(uuid())
+  workflowId     String           @unique
+  workflow       DispenseWorkflow @relation(fields: [workflowId], references: [id])
+  idempotencyKey String           @unique
+  status         String           @default("PENDING") // PENDING, IN_FLIGHT, COMPLETED, FAILED
+  payload        String           @db.Text // JSON string of MedicationDispensePayload
+  fhirResourceId String?
+  attempts       Int              @default(0)
+  lastError      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+}
+
+model IdempotencyKey {
+  id             String   @id @default(uuid())
+  key            String   @unique
+  resourceType   String
+  responseStatus Int?
+  responseBody   String?  @db.Text
+  status         String   @default("IN_PROGRESS") // IN_PROGRESS, COMPLETED, FAILED
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+}
+
+model Notification {
+  id               String           @id @default(uuid())
+  workflowId       String
+  workflow         DispenseWorkflow @relation(fields: [workflowId], references: [id])
+  recipientRole    String           @default("NURSE")
+  sanitizedMessage String
+  tokenizedRef     String
+  status           String           @default("CREATED") // CREATED, QUEUED, SENT, FAILED
+  attempts         Int              @default(0)
+  lastAttemptAt    DateTime?
+  createdAt        DateTime         @default(now())
+}
+
+model AuditRecord {
+  id                 String   @id @default(uuid())
+  fhirAuditEventId   String?
+  eventType          String   // INDENT_CREATED, FHIR_QUERY, RXNORM_VALIDATION, HL7_PARSED, RECONCILIATION_EVALUATED, FULFILLMENT_AUTHORIZED, DISPENSE_SUBMITTED, NOTIFICATION_SENT, UNAUTHORIZED_ACCESS
+  action             String   // C, R, U, D, E
+  outcome            String   // 0 (Success), 4 (Minor fail), 8 (Serious fail), 12 (Major fail)
+  outcomeDescription String
+  userId             String?
+  userRole           String?
+  entityReference    String?
+  ipAddress          String?
+  recordedAt         DateTime @default(now())
+}

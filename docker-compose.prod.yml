@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  medical-db:
+    image: postgres:16-alpine
+    container_name: medical-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: medical_coldchain_secret_pass_2026
+      POSTGRES_DB: coldchain_ehr
+    volumes:
+      - medical_pgdata:/var/lib/postgresql/data
+    networks:
+      - medical_internal
+
+  medical-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: medical-app
+    restart: always
+    depends_on:
+      - medical-db
+    environment:
+      PORT: 3000
+      NODE_ENV: production
+      DATABASE_URL: postgresql://postgres:medical_coldchain_secret_pass_2026@medical-db:5432/coldchain_ehr?schema=public
+      JWT_SECRET: medical-coldchain-dnahealth-jwt-secret-2026
+      FHIR_BASE_URL: https://hapi.fhir.org/baseR4
+      RXNAV_BASE_URL: https://rxnav.nlm.nih.gov/REST
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.medical.rule=Host(`medical.devcsl.tech`)"
+      - "traefik.http.routers.medical.entrypoints=websecure"
+      - "traefik.http.routers.medical.tls.certresolver=myresolver"
+      - "traefik.http.services.medical.loadbalancer.server.port=3000"
+      - "traefik.docker.network=app_admission_net"
+    networks:
+      - medical_internal
+      - app_admission_net
+
+volumes:
+  medical_pgdata:
+
+networks:
+  medical_internal:
+  app_admission_net:
+    external: true

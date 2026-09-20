@@ -1,0 +1,243 @@
+/* ==========================================================================
+   DNA Health Pharmacy Cold-Chain Interop System
+   Clean Hospital Design System (KISS, Restrained Clinical Palette)
+   ========================================================================== */
+
+:root {
+  /* Restrained Clinical Color Palette */
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-subtle: #f1f5f9;
+  --bg-active: #e2e8f0;
+
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --border-focus: #0284c7;
+
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  /* Clinical Signal Accents */
+  --clinical-blue: #0284c7;
+  --clinical-blue-dark: #0369a1;
+  --clinical-blue-light: #e0f2fe;
+
+  --safe-green: #16a34a;
+  --safe-green-light: #f0fdf4;
+  --safe-green-border: #bbf7d0;
+
+  --warning-amber: #d97706;
+  --warning-amber-light: #fffbeb;
+  --warning-amber-border: #fde68a;
+
+  --danger-red: #dc2626;
+  --danger-red-light: #fef2f2;
+  --danger-red-border: #fecaca;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
+
+  /* Layout & Elevation */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Base Utility Classes */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: 1.25rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.badge-blue {
+  background-color: var(--clinical-blue-light);
+  color: var(--clinical-blue-dark);
+  border: 1px solid #bae6fd;
+}
+
+.badge-green {
+  background-color: var(--safe-green-light);
+  color: var(--safe-green);
+  border: 1px solid var(--safe-green-border);
+}
+
+.badge-amber {
+  background-color: var(--warning-amber-light);
+  color: var(--warning-amber);
+  border: 1px solid var(--warning-amber-border);
+}
+
+.badge-red {
+  background-color: var(--danger-red-light);
+  color: var(--danger-red);
+  border: 1px solid var(--danger-red-border);
+}
+
+.badge-neutral {
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.btn-primary {
+  background-color: var(--clinical-blue);
+  color: var(--text-inverse);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--clinical-blue-dark);
+}
+
+.btn-outline {
+  background-color: var(--bg-surface);
+  color: var(--text-secondary);
+  border-color: var(--border-strong);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background-color: var(--bg-subtle);
+  color: var(--text-primary);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Code Snippet & Preformatted View */
+pre, code {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.code-box {
+  background-color: #f8fafc;
+  color: #1e293b;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+/* Table styles */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  background-color: var(--bg-subtle);
+  color: var(--text-secondary);
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.data-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.data-table tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Tab Navigation */
+.tabs-nav {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.25rem;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  color: var(--clinical-blue);
+  border-bottom-color: var(--clinical-blue);
+  font-weight: 600;
+}
