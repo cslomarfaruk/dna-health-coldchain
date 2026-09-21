@@ -85,7 +85,7 @@ export const RxNavValidator: React.FC<RxNavValidatorProps> = ({
       {/* Concept Verification Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
         gap: '1rem',
         marginBottom: '1.25rem'
       }}>

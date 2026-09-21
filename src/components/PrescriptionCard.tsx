@@ -160,7 +160,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({
       </div>
 
       {/* Side-by-Side Dual Comparison: Nurse Indent vs Doctor's Official Prescription */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.25rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))', gap: '1.25rem' }}>
         {/* Panel 1: Floor Nurse's Digital Indent (Bedside Request) */}
         <div className="card" style={{ padding: '1.25rem', backgroundColor: '#ffffff', border: '1px solid #e2e8f0' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.65rem' }}>
@@ -176,7 +176,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '0.75rem' }}>
               <div style={{ backgroundColor: '#f8fafc', padding: '0.6rem 0.75rem', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>
                   Inpatient Location
@@ -238,7 +238,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '0.75rem' }}>
               <div style={{ backgroundColor: '#f8fafc', padding: '0.6rem 0.75rem', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
                 <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase' }}>
                   Attending Physician
@@ -301,7 +301,7 @@ export const PrescriptionCard: React.FC<PrescriptionCardProps> = ({
         </div>
 
         {/* 4 Double-Check Gates */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', marginBottom: '0.85rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '0.75rem', marginBottom: '0.85rem' }}>
           {/* Gate 1: Drug Name Match */}
           <div style={{ backgroundColor: '#ffffff', padding: '0.65rem 0.75rem', borderRadius: '4px', border: `1px solid ${isDrugMatch ? '#bbf7d0' : '#fca5a5'}`, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ width: '22px', height: '22px', borderRadius: '50%', backgroundColor: isDrugMatch ? '#dcfce7' : '#fee2e2', color: isDrugMatch ? '#15803d' : '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>

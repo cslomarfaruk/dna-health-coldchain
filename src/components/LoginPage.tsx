@@ -176,12 +176,15 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         </div>
 
         {/* Main Split Grid */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'minmax(280px, 320px) 1fr',
-          gap: '1.25rem',
-          alignItems: 'stretch',
-        }}>
+        <div
+          className="login-split-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(280px, 320px) 1fr',
+            gap: '1.25rem',
+            alignItems: 'stretch',
+          }}
+        >
           {/* Left: Credential Sign In Form */}
           <div className="card" style={{ padding: '1.5rem', backgroundColor: '#ffffff', border: '1px solid #e2e8f0', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div>
@@ -286,7 +289,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               </span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            <div
+              className="login-personas-grid"
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '0.75rem' }}
+            >
               {PRESET_PERSONAS.map((p) => (
                 <div
                   key={p.role}

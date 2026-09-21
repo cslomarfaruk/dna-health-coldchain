@@ -94,6 +94,7 @@ export const DispensaryStepper: React.FC<DispensaryStepperProps> = ({
 
       {/* Step Cards Row */}
       <div
+        className="stepper-grid-responsive"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(5, minmax(0, 1fr))',

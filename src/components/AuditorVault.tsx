@@ -332,7 +332,7 @@ export const AuditorVault: React.FC<AuditorVaultProps> = ({ session }) => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
           gap: '0.85rem',
         }}
       >
@@ -506,8 +506,8 @@ export const AuditorVault: React.FC<AuditorVaultProps> = ({ session }) => {
                   borderRadius: '5px',
                   border: '1px solid #cbd5e1',
                   backgroundColor: '#ffffff',
-                  color: '#1e293b',
-                  width: '210px',
+                  maxWidth: '210px',
+                  width: '100%',
                 }}
               />
             </div>
@@ -550,7 +550,7 @@ export const AuditorVault: React.FC<AuditorVaultProps> = ({ session }) => {
             No audit trail events match the selected criteria.
           </div>
         ) : (
-          <div style={{ overflowX: 'auto' }}>
+          <div className="table-responsive" style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.76rem' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #cbd5e1', textAlign: 'left', color: '#475569', backgroundColor: '#f8fafc' }}>
@@ -749,6 +749,7 @@ export const AuditorVault: React.FC<AuditorVaultProps> = ({ session }) => {
           onClick={() => setSelectedRecord(null)}
         >
           <div
+            className="modal-dialog-responsive"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '8px',
@@ -807,9 +808,10 @@ export const AuditorVault: React.FC<AuditorVaultProps> = ({ session }) => {
 
             {/* Event Overview Grid */}
             <div
+              className="modal-grid-2col-responsive"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(2, 1fr)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
                 gap: '0.75rem',
                 fontSize: '0.76rem',
               }}

@@ -93,6 +93,7 @@ export const UnifiedDispensaryWorkstation: React.FC<UnifiedDispensaryWorkstation
   const [showTempControls, setShowTempControls] = useState(false);
   const [expandedJson, setExpandedJson] = useState<Record<string, boolean>>({});
   const [stepNotice, setStepNotice] = useState<string | null>(null);
+  const [mobileWorkstationTab, setMobileWorkstationTab] = useState<'QUEUE' | 'WORKSPACE'>('WORKSPACE');
 
   const toggleJson = (key: string) => {
     setExpandedJson((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -310,8 +311,53 @@ export const UnifiedDispensaryWorkstation: React.FC<UnifiedDispensaryWorkstation
         </>
       )}
 
+      {/* Mobile Workstation View Switcher (when active indent selected) */}
+      {activeIndent && (
+        <div className="mobile-only" style={{ marginBottom: '0.25rem' }}>
+          <div style={{ display: 'flex', backgroundColor: '#e2e8f0', borderRadius: '6px', padding: '3px', gap: '3px' }}>
+            <button
+              type="button"
+              onClick={() => setMobileWorkstationTab('QUEUE')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                borderRadius: '4px',
+                border: 'none',
+                backgroundColor: mobileWorkstationTab === 'QUEUE' ? '#ffffff' : 'transparent',
+                color: mobileWorkstationTab === 'QUEUE' ? '#0284c7' : '#64748b',
+                boxShadow: mobileWorkstationTab === 'QUEUE' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Order Queue ({availableIndents.length})
+            </button>
+            <button
+              type="button"
+              onClick={() => setMobileWorkstationTab('WORKSPACE')}
+              style={{
+                flex: 1,
+                padding: '0.45rem',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                borderRadius: '4px',
+                border: 'none',
+                backgroundColor: mobileWorkstationTab === 'WORKSPACE' ? '#ffffff' : 'transparent',
+                color: mobileWorkstationTab === 'WORKSPACE' ? '#0284c7' : '#64748b',
+                boxShadow: mobileWorkstationTab === 'WORKSPACE' ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                cursor: 'pointer',
+              }}
+            >
+              Verify Order
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 3. TWO-COLUMN WORKSTATION BODY */}
       <div
+        className="workstation-split-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'minmax(300px, 340px) minmax(0, 1fr)',
@@ -320,22 +366,30 @@ export const UnifiedDispensaryWorkstation: React.FC<UnifiedDispensaryWorkstation
         }}
       >
         {/* LEFT COLUMN: MEDICATION QUEUE & SCENARIOS */}
-        <DispensaryMedicationQueue
-          availableIndents={availableIndents}
-          activeIndent={activeIndent}
-          onSelectIndent={onSelectIndent}
-          onClearSelection={onClearSelection}
-          selectedScenarioId={selectedScenarioId}
-          onSelectScenario={onSelectScenario}
-          scenarios={scenarios}
-          queueSearch={queueSearch}
-          onSearchChange={setQueueSearch}
-          queueFilter={queueFilter}
-          onFilterChange={setQueueFilter}
-        />
+        <div className={activeIndent && mobileWorkstationTab === 'WORKSPACE' ? 'desktop-only' : ''}>
+          <DispensaryMedicationQueue
+            availableIndents={availableIndents}
+            activeIndent={activeIndent}
+            onSelectIndent={(indent) => {
+              onSelectIndent(indent);
+              setMobileWorkstationTab('WORKSPACE');
+            }}
+            onClearSelection={onClearSelection}
+            selectedScenarioId={selectedScenarioId}
+            onSelectScenario={onSelectScenario}
+            scenarios={scenarios}
+            queueSearch={queueSearch}
+            onSearchChange={setQueueSearch}
+            queueFilter={queueFilter}
+            onFilterChange={setQueueFilter}
+          />
+        </div>
 
         {/* RIGHT COLUMN: EMPTY STATE OR STEP VERIFICATION */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 0 }}>
+        <div
+          className={activeIndent && mobileWorkstationTab === 'QUEUE' ? 'desktop-only' : ''}
+          style={{ display: 'flex', flexDirection: 'column', gap: '1rem', minWidth: 0 }}
+        >
           {selectedScenarioId === 'SCENARIO-INVALID-HL7' ? (
             /* Dedicated Protocol Test View: Explains the MSH-9 message type rejection clearly */
             <Hl7RejectionTestCard

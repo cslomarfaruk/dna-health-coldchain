@@ -191,22 +191,25 @@ export const ComplianceModal: React.FC<ComplianceModalProps> = ({ isOpen, onClos
       zIndex: 50,
       padding: '1.5rem'
     }}>
-      <div style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: 'var(--radius-md)',
-        maxWidth: '840px',
-        width: '100%',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        boxShadow: 'var(--shadow-lg)',
-        border: '1px solid var(--border-subtle)',
-        padding: '1.5rem'
-      }}>
+      <div
+        className="modal-dialog-responsive"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderRadius: 'var(--radius-md)',
+          maxWidth: '840px',
+          width: '100%',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          boxShadow: 'var(--shadow-lg)',
+          border: '1px solid var(--border-subtle)',
+          padding: '1.25rem'
+        }}
+      >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '0.75rem' }}>
           <div>
             <h2 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', margin: 0 }}>
-              System Architecture & Standards Checklist
+              System Architecture &amp; Standards Checklist
             </h2>
             <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', margin: 0 }}>
               Automated checks verifying clinical standards, HL7/FHIR parsing, privacy, and security controls
@@ -218,25 +221,40 @@ export const ComplianceModal: React.FC<ComplianceModalProps> = ({ isOpen, onClos
         </div>
 
         {/* Action button */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', backgroundColor: 'var(--bg-app)', padding: '0.75rem', borderRadius: 'var(--radius-sm)' }}>
-          <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-            Status: {allPassed ? <strong style={{ color: 'var(--safe-green)' }}>6 of 6 Standards Passed (100%)</strong> : <span>Click to execute automated verification suite</span>}
-          </div>
-          <button onClick={runAllTests} disabled={isRunningAll} className="btn btn-primary" style={{ fontSize: '0.8rem' }}>
-            {isRunningAll ? <Loader2 size={14} className="animate-spin" /> : <Play size={14} />}
-            <span>Run All Verification Checks</span>
+        <div style={{ marginBottom: '1rem' }}>
+          <button
+            onClick={runAllTests}
+            disabled={isRunningAll}
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '0.6rem', fontSize: '0.875rem' }}
+          >
+            {isRunningAll ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>Running Complete Clinical Test Suite...</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 size={16} />
+                <span>Run System Architecture &amp; Clinical Interoperability Test Suite</span>
+              </>
+            )}
           </button>
         </div>
 
-        {/* Checklist */}
+        {/* Tests List */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {tests.map((test) => (
-            <div key={test.id} style={{
-              padding: '0.85rem 1rem',
-              borderRadius: 'var(--radius-sm)',
-              border: '1px solid var(--border-subtle)',
-              backgroundColor: test.status === 'PASSED' ? 'var(--safe-green-light)' : 'var(--bg-surface)'
-            }}>
+            <div
+              key={test.id}
+              style={{
+                border: '1px solid var(--border-subtle)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '0.85rem',
+                backgroundColor: test.status === 'PASSED' ? 'var(--safe-green-light)' : test.status === 'FAILED' ? 'var(--danger-red-light)' : 'var(--bg-app)',
+                borderLeft: `4px solid ${test.status === 'PASSED' ? 'var(--safe-green)' : test.status === 'FAILED' ? 'var(--danger-red)' : 'var(--border-strong)'}`
+              }}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
                 <div>
                   <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
@@ -255,7 +273,16 @@ export const ComplianceModal: React.FC<ComplianceModalProps> = ({ isOpen, onClos
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.75rem', marginTop: '0.4rem' }}>
+              <div
+                className="modal-grid-2col-responsive"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))',
+                  gap: '0.5rem',
+                  fontSize: '0.75rem',
+                  marginTop: '0.4rem'
+                }}
+              >
                 <div style={{ color: 'var(--danger-red)', backgroundColor: '#fef2f2', padding: '0.4rem 0.6rem', borderRadius: '4px' }}>
                   <strong>🚩 Red Flag to Avoid:</strong> {test.redFlagDescription}
                 </div>

@@ -9,6 +9,7 @@ import {
   Building2,
   Lock,
   Activity,
+  X,
 } from 'lucide-react';
 
 export type NavigationTab = 'DISPENSARY' | 'INDENTS' | 'INTEROP' | 'AUDIT' | 'SURGERY';
@@ -19,6 +20,8 @@ interface SidebarProps {
   onRoleChange: (role: string) => void;
   onSignOut: () => void;
   pendingIndentsCount?: number;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -27,6 +30,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onRoleChange,
   onSignOut,
   pendingIndentsCount = 3,
+  isOpen = false,
+  onClose,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -80,6 +85,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <aside
+      className={`sidebar-drawer ${isOpen ? 'open' : ''}`}
       style={{
         width: '250px',
         backgroundColor: '#ffffff',
@@ -104,35 +110,56 @@ export const Sidebar: React.FC<SidebarProps> = ({
             borderBottom: '1px solid #e2e8f0',
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             gap: '0.75rem',
           }}
         >
-          <div
-            style={{
-              width: '34px',
-              height: '34px',
-              borderRadius: '7px',
-              backgroundColor: '#0284c7',
-              color: '#ffffff',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontWeight: 800,
-              fontSize: '1rem',
-              letterSpacing: '0.5px',
-              boxShadow: '0 2px 6px rgba(2, 132, 199, 0.25)',
-            }}
-          >
-            <Building2 size={18} />
-          </div>
-          <div>
-            <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a', letterSpacing: '0.2px', lineHeight: 1.2 }}>
-              ST. JUDE HEALTH
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div
+              style={{
+                width: '34px',
+                height: '34px',
+                borderRadius: '7px',
+                backgroundColor: '#0284c7',
+                color: '#ffffff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontWeight: 800,
+                fontSize: '1rem',
+                letterSpacing: '0.5px',
+                boxShadow: '0 2px 6px rgba(2, 132, 199, 0.25)',
+              }}
+            >
+              <Building2 size={18} />
             </div>
-            <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px', fontWeight: 600 }}>
-              Pharmacy · Cold Chain
+            <div>
+              <div style={{ fontSize: '0.9rem', fontWeight: 700, color: '#0f172a', letterSpacing: '0.2px', lineHeight: 1.2 }}>
+                ST. JUDE HEALTH
+              </div>
+              <div style={{ fontSize: '0.68rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.4px', fontWeight: 600 }}>
+                Pharmacy · Cold Chain
+              </div>
             </div>
           </div>
+
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="mobile-only"
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#64748b',
+                cursor: 'pointer',
+                padding: '0.35rem',
+                borderRadius: '4px',
+              }}
+              aria-label="Close navigation"
+            >
+              <X size={18} />
+            </button>
+          )}
         </div>
 
         {/* Active Staff Persona Card */}
@@ -210,7 +237,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
             return (
               <button
                 key={item.id}
-                onClick={() => navigate(item.path)}
+                onClick={() => {
+                  navigate(item.path);
+                  if (onClose) onClose();
+                }}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -311,7 +341,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </label>
           <select
             value={currentRole}
-            onChange={(e) => onRoleChange(e.target.value)}
+            onChange={(e) => {
+              onRoleChange(e.target.value);
+              if (onClose) onClose();
+            }}
             style={{
               width: '100%',
               padding: '0.4rem 0.5rem',
@@ -353,7 +386,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Sign Out Button */}
         <button
-          onClick={onSignOut}
+          onClick={() => {
+            onSignOut();
+            if (onClose) onClose();
+          }}
           style={{
             width: '100%',
             display: 'flex',

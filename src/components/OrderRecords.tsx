@@ -309,7 +309,7 @@ export const OrderRecords: React.FC<OrderRecordsProps> = ({
       </div>
 
       {/* 2. 4 Hospital-Grade KPI Metric Tiles */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))', gap: '0.75rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 200px), 1fr))', gap: '0.75rem' }}>
         {/* Metric 1 */}
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1rem', boxShadow: '0 1px 2px rgba(0,0,0,0.02)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -480,7 +480,7 @@ export const OrderRecords: React.FC<OrderRecordsProps> = ({
         </div>
 
         {/* Orders Table */}
-        <div style={{ overflowX: 'auto', border: '1px solid #f1f5f9', borderRadius: '6px' }}>
+        <div className="table-responsive" style={{ overflowX: 'auto', border: '1px solid #f1f5f9', borderRadius: '6px' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem', textAlign: 'left' }}>
             <thead>
               <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#475569', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
@@ -674,6 +674,7 @@ export const OrderRecords: React.FC<OrderRecordsProps> = ({
           onClick={() => setSelectedOrderDetails(null)}
         >
           <div
+            className="modal-dialog-responsive"
             style={{
               backgroundColor: '#ffffff',
               borderRadius: '10px',
@@ -802,7 +803,7 @@ export const OrderRecords: React.FC<OrderRecordsProps> = ({
               {activePayloadTab === 'CLINICAL' && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {/* Top Banner Card */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                  <div className="modal-grid-2col-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                     <div style={{ backgroundColor: '#f8fafc', padding: '0.85rem', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
                       <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase' }}>
                         Prescribed Medication
@@ -865,7 +866,7 @@ export const OrderRecords: React.FC<OrderRecordsProps> = ({
                   )}
 
                   {/* Metadata Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
+                  <div className="modal-grid-3col-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '0.75rem' }}>
                     <div style={{ backgroundColor: '#ffffff', padding: '0.75rem', borderRadius: '6px', border: '1px solid #e2e8f0' }}>
                       <span style={{ fontSize: '0.7rem', color: '#64748b', display: 'block', fontWeight: 600 }}>Ordering Physician</span>
                       <strong style={{ fontSize: '0.82rem', color: '#0f172a', marginTop: '0.15rem', display: 'block' }}>{selectedOrderDetails.doctorName}</strong>

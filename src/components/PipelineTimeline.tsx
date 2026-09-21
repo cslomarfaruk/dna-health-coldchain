@@ -76,11 +76,14 @@ export const PipelineTimeline: React.FC<PipelineTimelineProps> = ({
         </div>
       </div>
 
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${STEPS.length}, minmax(0, 1fr))`,
-        gap: '0.4rem',
-      }}>
+      <div
+        className="stepper-grid-responsive"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${STEPS.length}, minmax(0, 1fr))`,
+          gap: '0.4rem',
+        }}
+      >
         {STEPS.map((step, idx) => {
           // A step is done ONLY IF its clinical action has actually succeeded!
           const isDone = stageStatuses[step.id] === true;

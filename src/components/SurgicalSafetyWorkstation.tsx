@@ -424,7 +424,7 @@ export const SurgicalSafetyWorkstation: React.FC<SurgicalSafetyWorkstationProps>
           </div>
 
           {/* 4-Pillar Clinical Verification Matrix */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 250px), 1fr))', gap: '1rem' }}>
             {/* PILLAR 1: SCHEDULED SURGERY & SITE */}
             <div
               style={{
@@ -649,7 +649,7 @@ export const SurgicalSafetyWorkstation: React.FC<SurgicalSafetyWorkstationProps>
                   </span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.72rem', marginBottom: '0.4rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 105px), 1fr))', gap: '0.4rem', fontSize: '0.72rem', marginBottom: '0.4rem' }}>
                   <div style={{ backgroundColor: '#f8fafc', padding: '0.35rem 0.5rem', borderRadius: '4px' }}>
                     <div style={{ color: '#64748b' }}>INR [6301-6]</div>
                     <div style={{ fontWeight: 700, color: activeCase.coagulation.tests.inr.status === 'NORMAL' ? '#16a34a' : '#dc2626' }}>
@@ -1043,7 +1043,7 @@ export const SurgicalSafetyWorkstation: React.FC<SurgicalSafetyWorkstationProps>
                 <h3 style={{ fontSize: '0.85rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: '#0f172a' }}>
                   Pre-Incision Time-Out Narrative Record
                 </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                <div className="modal-grid-2col-responsive" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 180px), 1fr))', gap: '0.5rem', marginBottom: '0.5rem' }}>
                   <div><strong>Patient:</strong> {compiledComposition.subject.display}</div>
                   <div><strong>Procedure:</strong> {compiledComposition.title}</div>
                   <div><strong>Surgeon:</strong> {compiledComposition.author[0]?.display}</div>

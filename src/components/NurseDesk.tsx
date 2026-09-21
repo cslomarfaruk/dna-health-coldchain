@@ -1050,7 +1050,7 @@ export const NurseDesk: React.FC<NurseDeskProps> = ({ session }) => {
               )}
 
               {/* Row 1: Patient Details & Bed Location */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 140px), 1fr))', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.2rem' }}>
                     <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#334155' }}>
@@ -1153,8 +1153,8 @@ export const NurseDesk: React.FC<NurseDeskProps> = ({ session }) => {
                 </div>
               </div>
 
-              {/* Row 2: Medication Requisition Details */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem', marginBottom: '0.75rem' }}>
+              {/* Row 2: Medication & Dosing */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 130px), 1fr))', gap: '0.75rem', marginBottom: '0.75rem' }}>
                 <div style={{ gridColumn: 'span 2' }}>
                   <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#334155', display: 'block', marginBottom: '0.2rem' }}>
                     Prescribed Medication <span style={{ color: '#ef4444' }}>*</span>
@@ -1342,7 +1342,7 @@ export const NurseDesk: React.FC<NurseDeskProps> = ({ session }) => {
         )}
 
         {/* Compact Table */}
-        <div style={{ overflowX: 'auto' }}>
+        <div className="table-responsive" style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.78rem' }}>
             <thead>
               <tr style={{ borderBottom: '2px solid #e2e8f0', textAlign: 'left', color: '#64748b', fontSize: '0.72rem', textTransform: 'uppercase' }}>
@@ -1584,7 +1584,7 @@ export const NurseDesk: React.FC<NurseDeskProps> = ({ session }) => {
             padding: '1rem',
           }}
         >
-          <div className="card" style={{ maxWidth: '500px', width: '100%', padding: '1.25rem', backgroundColor: '#ffffff', borderRadius: '8px' }}>
+          <div className="card modal-dialog-responsive" style={{ maxWidth: '500px', width: '100%', padding: '1.25rem', backgroundColor: '#ffffff', borderRadius: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', borderBottom: '1px solid #f1f5f9', paddingBottom: '0.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                 <Edit2 size={16} style={{ color: 'var(--clinical-blue)' }} />
@@ -1601,7 +1601,7 @@ export const NurseDesk: React.FC<NurseDeskProps> = ({ session }) => {
             </div>
 
             <form onSubmit={handleSaveEdit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem', marginBottom: '0.75rem' }}>
+              <div className="modal-grid-2col-responsive" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.65rem', marginBottom: '0.75rem' }}>
                 <div>
                   <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#475569' }}>Medication</label>
                   <input

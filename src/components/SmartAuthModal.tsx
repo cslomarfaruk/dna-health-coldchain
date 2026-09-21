@@ -62,18 +62,21 @@ export const SmartAuthModal: React.FC<SmartAuthModalProps> = ({ isOpen, onClose 
       padding: '1rem',
       backdropFilter: 'blur(3px)',
     }}>
-      <div style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: '10px',
-        width: '100%',
-        maxWidth: '720px',
-        maxHeight: '90vh',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: 'var(--shadow-lg)',
-        border: '1px solid var(--border-subtle)',
-        overflow: 'hidden',
-      }}>
+      <div
+        className="modal-dialog-responsive"
+        style={{
+          backgroundColor: 'var(--bg-surface)',
+          borderRadius: '10px',
+          width: '100%',
+          maxWidth: '720px',
+          maxHeight: '90vh',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: 'var(--shadow-lg)',
+          border: '1px solid var(--border-subtle)',
+          overflow: 'hidden',
+        }}
+      >
         {/* Modal Header */}
         <div style={{
           padding: '1.25rem 1.5rem',

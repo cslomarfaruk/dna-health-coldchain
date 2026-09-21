@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { X } from 'lucide-react';
+import { X, Layers, FileText, Database, ShieldCheck, Activity } from 'lucide-react';
 import { Navbar } from './components/Navbar';
 import { PipelineTimeline, PipelineStage, StageStatusMap } from './components/PipelineTimeline';
 import { PrescriptionCard } from './components/PrescriptionCard';
@@ -45,7 +45,13 @@ function AppContent() {
   const location = useLocation();
 
   const [session, setSession] = useState<AuthSession | null>(() => getStoredSession());
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedScenarioId, setSelectedScenarioId] = useState<string>(SAMPLE_HL7_SCENARIOS[0].id);
+
+  // Auto-close mobile drawer whenever navigation route changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location.pathname]);
   const [currentStage, setCurrentStage] = useState<PipelineStage>('INDENT');
   const hasInitialized = useRef(false);
   const requestSeqRef = useRef(0);
@@ -704,13 +710,22 @@ function AppContent() {
       : 5;
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-app)' }}>
-      {/* 1. Left Hospital Sidebar */}
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--bg-app)', position: 'relative' }}>
+      {/* 1. Left Hospital Sidebar & Mobile Drawer */}
       <Sidebar
         practitionerName={session.user.fullName}
         currentRole={session.user.role}
         onRoleChange={handleRoleChange}
         onSignOut={handleSignOut}
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+      />
+
+      {/* Mobile Drawer Backdrop Overlay */}
+      <div
+        className={`mobile-drawer-overlay ${isMobileMenuOpen ? 'open' : ''}`}
+        onClick={() => setIsMobileMenuOpen(false)}
+        aria-hidden="true"
       />
 
       {/* 2. Main Workstation Area */}
@@ -722,10 +737,11 @@ function AppContent() {
           practitionerName={session.user.fullName}
           currentRole={session.user.role}
           onSignOut={handleSignOut}
+          onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
         />
 
         {/* Scrollable Workstation Content */}
-        <main style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.75rem 3rem 1.75rem' }}>
+        <main className="app-main-content" style={{ flex: 1, overflowY: 'auto', padding: '1.25rem 1.75rem 3rem 1.75rem' }}>
           <div style={{ maxWidth: '1150px', margin: '0 auto', width: '100%' }}>
             {/* Backend Error / Safety Alert Banner */}
             {backendError && (
@@ -1065,6 +1081,62 @@ function AppContent() {
             </Routes>
           </div>
         </main>
+
+        {/* Mobile Bottom Navigation Bar (Persistent touch switching) */}
+        {session && (
+          <nav className="mobile-bottom-nav" aria-label="Mobile Navigation">
+            {['PHARMACIST', 'ADMIN'].includes(session.user.role) && (
+              <button
+                type="button"
+                onClick={() => navigate('/dispensary')}
+                className={`mobile-bottom-nav-item ${location.pathname.startsWith('/dispensary') ? 'active' : ''}`}
+              >
+                <Layers size={17} />
+                <span>Dispensary</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => navigate('/indents')}
+              className={`mobile-bottom-nav-item ${location.pathname.startsWith('/indents') || location.pathname.startsWith('/nurse') ? 'active' : ''}`}
+            >
+              <FileText size={17} />
+              <span>{session.user.role === 'NURSE' ? 'Nurse' : 'Requests'}</span>
+            </button>
+
+            {['PHARMACIST', 'ADMIN'].includes(session.user.role) && (
+              <button
+                type="button"
+                onClick={() => navigate('/orders')}
+                className={`mobile-bottom-nav-item ${location.pathname.startsWith('/orders') ? 'active' : ''}`}
+              >
+                <Database size={17} />
+                <span>Orders</span>
+              </button>
+            )}
+
+            {['AUDITOR', 'ADMIN'].includes(session.user.role) && (
+              <button
+                type="button"
+                onClick={() => navigate('/audit')}
+                className={`mobile-bottom-nav-item ${location.pathname.startsWith('/audit') ? 'active' : ''}`}
+              >
+                <ShieldCheck size={17} />
+                <span>Audit</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => navigate('/surgery')}
+              className={`mobile-bottom-nav-item ${location.pathname.startsWith('/surgery') || location.pathname.startsWith('/timeout') ? 'active' : ''}`}
+            >
+              <Activity size={17} />
+              <span>OR Safety</span>
+            </button>
+          </nav>
+        )}
       </div>
     </div>
   );
